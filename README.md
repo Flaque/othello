@@ -9,6 +9,7 @@ This is our othello project.
 1. run `npm start`
 2. Open [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/) in your browser.
 3. (optional) You can also open up [http://localhost:8080/](http://localhost:8080/) in your browser, but you won't get the fancy refresh-on-save stuff. ( You also won't get the bar this way. )
+4. Click on "build".
 
 # What are all these folders?
 

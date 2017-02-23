@@ -2,9 +2,21 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+    entry: './src/main.js',
   output: {
     filename: './build/bundle.js'
+  },
+
+  /**
+   * This lets us import css files in javascript!
+   */
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      }
+    ]
   },
 
   /**
@@ -16,9 +28,5 @@ module.exports = {
     filename: './build/index.html',
     template: './src/index.html'
   })],
-
-  devServer: {
-    contentBase: "./build"
-  }
 
 };
