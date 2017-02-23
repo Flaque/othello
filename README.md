@@ -18,7 +18,7 @@ does the autorefresh) takes all the javascript files and sticks them together
 when it sees a `require` call. This makes sure we don't have to have 1 giant
 javascript file (ewwww).
 
-** You should not edit these files as they are overwritten every time you save a file in src. **
+**You should not edit these files as they are overwritten every time you save a file in src.**
 
 ### `src`
 This is where the real code lives! Edit these files.
