@@ -10,7 +10,8 @@
 }
 
 .square:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  background: #3b536b;
 }
 
 .board {
@@ -18,6 +19,7 @@
   height: 800px;
   margin: auto;
   background: #2c3e50;
+  padding: 0 16px;
 }
 
 .square .circle {
