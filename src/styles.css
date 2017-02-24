@@ -38,3 +38,11 @@
 .board .square .circle.white {
   background: white;
 }
+
+.board .square .circle.black {
+  background: black;
+}
+
+.board .square .circle.active {
+  display: block;
+}

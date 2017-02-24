@@ -7,7 +7,8 @@ import Board from "./board/board.js"
 const board = new Board(8, 8)
 
 function setup() {
-  board.build("#board-container")
+  board.insertIntoElement("#board-container")
+  board.bindClickEvents()
 }
 
 setup()
