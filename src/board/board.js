@@ -1,6 +1,7 @@
 import $ from "jquery"
 import board_html from './board_html.js'
 import * as colors from './colors'
+import {getGlobals, triggerGlobalEvent, events} from '../globals.js'
 
 /**
  * Private Function
@@ -73,7 +74,6 @@ export default class {
     this.rows = rows
     this.columns = columns
     this.state = _emptyStateArray(rows, columns)
-    this.isBlacksTurn = true // Black always goes first
   }
 
   /**
@@ -98,11 +98,11 @@ export default class {
       let y = $(this).data("y")
 
       // Place piece
-      if (board.isBlacksTurn) board.placePiece(x, y, colors.BLACK)
+      if (getGlobals().isBlacksTurn) board.placePiece(x, y, colors.BLACK)
       else board.placePiece(x, y, colors.WHITE)
 
-      // Change turn
-      board.isBlacksTurn = !board.isBlacksTurn
+      // Change turn globally
+      triggerGlobalEvent(events.TOGGLE_BLACKS_TURN)
     })
   }
 

@@ -1,3 +1,23 @@
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-family: Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 300;
+}
+
+#labels {
+  width: 100%;
+}
+
+#labels h1 {
+  float: left;
+}
+
 .square {
   min-height:80px;
   max-width: 80px;
@@ -16,11 +36,26 @@
   background: #3b536b;
 }
 
+#board-container {
+  height: 100%;
+  background: #2c3e50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 640px;
+}
+
 .board {
   width: 640px;
-  height: 640px;
-  margin: auto;
-  background: #2c3e50;
+  padding-top: 100%;
   padding: 0;
 }
 
@@ -42,11 +77,11 @@
 }
 
 .board .square .circle.white {
-  background: white;
+  background: #e7e7e7;
 }
 
 .board .square .circle.black {
-  background: black;
+  background: #282828;
 }
 
 .board .square .circle.active {
