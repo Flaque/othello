@@ -66,6 +66,29 @@ function _emptyStateArray(rows, columns) {
 }
 
 /**
+ * Sends an event that Increments Blacks Score
+ */
+function _addBlackTileScore() {
+  triggerGlobalEvent(events.INCREMENT_BLACK_SCORE)
+}
+
+/**
+ * Sends an event that Increments Whites Score
+ */
+function _addWhiteTileScore() {
+  triggerGlobalEvent(events.INCREMENT_WHITE_SCORE)
+}
+
+/**
+ * Sends an event that Increments Blacks Score and decrements
+ * whites score if blackTileWasGained, otherwise does the
+ * opposite.
+ */
+function _flipTileScore(blackTileWasGained) {
+  triggerGlobalEvent(events.FLIP_TILE, blackTileWasGained)
+}
+
+/**
  * Publicly exported class
  */
 export default class {
@@ -120,6 +143,12 @@ export default class {
     // Check that the piece is placed on the board.
     if ( _isOutsideBoard(x, y, this) ) {
       throw "A piece must be placed on the board"
+    }
+
+    if (color === colors.BLACK) {
+      _addBlackTileScore()
+    } else {
+      _addWhiteTileScore()
     }
 
     // Update view and state

@@ -18,6 +18,26 @@ h1, h2, h3 {
   float: left;
 }
 
+#labels .right {
+  float: right;
+}
+
+.mini-circle {
+  height: 16px;
+  width: 16px;
+  border-radius: 32px;
+  display:inline-block;
+  margin-right: 5px;
+}
+
+.mini-circle.white {
+  background: #e7e7e7;
+}
+
+.mini-circle.black {
+  background: #282828;
+}
+
 .square {
   min-height:80px;
   max-width: 80px;
