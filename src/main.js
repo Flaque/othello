@@ -33,6 +33,10 @@ var app = new Vue({
   },
   methods: {
     placePiece: function(col, event) {
+      if (col.player != PLAYERS.EMPTY) {
+        return // Don't do anything on a filled cell
+      }
+
       col.active = true
       col.player = this.turn
       this.turn = (this.turn === PLAYERS.WHITE)
