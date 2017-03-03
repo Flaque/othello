@@ -18,10 +18,16 @@
       </div>
 
       <div class="board">
+
+        <!-- For loop -->
         <div class="row" v-for="row in rows">
+
+          <!-- Nested for loop -->
           <div class="col-xs square" v-for="col in row"
-            v-on:click="placePiece(col, $event)">
+            v-on:click="placePiece(col, $event)" v-bind:class="squareClass(col)">
+
              <div class="circle" v-bind:class="{'active': col.active, 'white': col.player === 'white', 'black': col.player === 'black'}"></div>
+
           </div>
         </div>
       </div>
