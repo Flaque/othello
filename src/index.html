@@ -1,20 +1,16 @@
 <html>
   <body>
 
+    <head>
+    </head>
+
     <div id="board-container">
-
-      <div class="middle">
-        <div id="labels">
-          <h1 class="whos-turn">Black</h1>
-
-          <div class="right">
-            <h3><div class="mini-circle black"></div> <span class="black-label">0</span></h3>
-            <h3><div class="mini-circle white"></div> <span class="white-label">0</span></h3>
-
+      <div class="board">
+        <div class="row" v-for="row in rows">
+          <div class="col-xs square" v-for="col in row"
+            v-on:click="placePiece(col, $event)">
+             <div class="circle" v-bind:class="{'active': col.active, 'white': col.player === 'white', 'black': col.player === 'black'}"></div>
           </div>
-        </div>
-        <div class="board-wrapper">
-          <!-- Board is dynamically created with board.js -->
         </div>
       </div>
     </div>
