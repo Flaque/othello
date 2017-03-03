@@ -2,6 +2,7 @@ import $ from "jquery"
 import board_html from './board_html.js'
 import * as colors from './colors'
 import {getGlobals, triggerGlobalEvent, events} from '../globals.js'
+import {getSides} from '../grid_utils.js'
 
 /**
  * Private Function
@@ -51,7 +52,26 @@ function _placePieceInHTML(x, y, color) {
  * Sets the square to be owned by either "white" or "black".
  */
 function _setSquareState(x, y, color, board) {
-  board.state[x][y] = color
+  board.state[x][y] = {color: color, blackAvailable: true, whiteAvailable: true}
+}
+
+function _updateSidePositions(x, y, board, color) {
+  let sides = getSides(x, y, 8, 8)
+  for (let key in sides) {
+
+    console.log(sides[key])
+    if (color != colors.BLACK && color != colors.WHITE) {
+      board.state[sides[key][0]][sides[key][1]]
+    }
+  }
+}
+
+function _updateAvailableSpots(board) {
+  for (let x = 0; x < 8; x++) {
+    for (let y = 0; y < 8; y++) {
+      _updateSidePositions(x, y, board)
+    }
+  }
 }
 
 /**
@@ -154,6 +174,7 @@ export default class {
     // Update view and state
     _placePieceInHTML(x, y, color)
     _setSquareState(x, y, color, this)
+    _updateAvailableSpots(this)
 
     return this
   }

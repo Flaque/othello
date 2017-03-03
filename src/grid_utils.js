@@ -15,7 +15,7 @@ function getSides(x, y, width, height) {
     delete sides.left;
     delete sides.upLeft;
     delete sides.downLeft;
-  } else if (x === width) {
+  } else if (x === width-1) {
     delete sides.right;
     delete sides.upRight;
     delete sides.downRight;
@@ -26,7 +26,7 @@ function getSides(x, y, width, height) {
     delete sides.up;
     delete sides.upRight;
     delete sides.upLeft;
-  } else if (y === height) {
+  } else if (y === height-1) {
     delete sides.down;
     delete sides.downRight;
     delete sides.downLeft;
@@ -34,3 +34,5 @@ function getSides(x, y, width, height) {
 
   return sides
 }
+
+export {getSides}
