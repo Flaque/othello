@@ -11,6 +11,9 @@ This is our othello project.
 3. (optional) You can also open up [http://localhost:8080/](http://localhost:8080/) in your browser, but you won't get the fancy refresh-on-save stuff. ( You also won't get the bar this way. )
 4. Click on "build".
 
+# How is this built?
+This site is built using [vue](https://vuejs.org/), which is a fancy javascript library that lets us build really simple user interfaces. 
+
 # What are all these folders?
 
 ### `build`
