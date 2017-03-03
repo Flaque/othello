@@ -4,7 +4,19 @@
     <head>
     </head>
 
+
     <div id="board-container">
+
+      <div class="middle">
+      <div id="labels">
+        <h1 class="whos-turn">{{turn}}</h1>
+
+        <div class="right">
+          <h3><div class="mini-circle black"></div> <span class="black-label">{{blackScore}}</span></h3>
+          <h3><div class="mini-circle white"></div> <span class="white-label">{{whiteScore}}</span></h3>
+        </div>
+      </div>
+
       <div class="board">
         <div class="row" v-for="row in rows">
           <div class="col-xs square" v-for="col in row"
@@ -13,6 +25,8 @@
           </div>
         </div>
       </div>
+
+    </div>
     </div>
 
   </body>

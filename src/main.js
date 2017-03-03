@@ -1,4 +1,3 @@
-import $ from "jquery"
 import "flexboxgrid/css/flexboxgrid.min.css"
 import "./styles.css"
 import Vue from './vendor/vue.js'
@@ -29,7 +28,9 @@ var app = new Vue({
   el: '#board-container',
   data: {
     rows: createBoardState(),
-    turn: 'black'
+    turn: 'black',
+    blackScore: 0,
+    whiteScore: 0
   },
   methods: {
     placePiece: function(col, event) {
@@ -39,9 +40,14 @@ var app = new Vue({
 
       col.active = true
       col.player = this.turn
-      this.turn = (this.turn === PLAYERS.WHITE)
-        ? PLAYERS.BLACK
-        : PLAYERS.WHITE
+
+      if (this.turn === PLAYERS.WHITE) {
+        this.turn = PLAYERS.BLACK
+        this.whiteScore++
+      } else {
+        this.turn = PLAYERS.WHITE
+        this.blackScore++
+      }
     }
   }
 })
