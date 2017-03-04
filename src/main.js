@@ -12,6 +12,29 @@ const PLAYERS = {
 const WIDTH = 8
 const HEIGHT = 8
 
+function setPieceInState(state, x, y, player) {
+  state[x][y].player = player
+  state[x][y].active = true
+  return state
+}
+
+/**
+ * Places the default pattern:
+ *
+ *   xo
+ *   ox
+ *
+ */
+function placeDefaultPieces(state) {
+  setPieceInState(state, 2, 3, PLAYERS.WHITE)
+  setPieceInState(state, 2, 4, PLAYERS.BLACK)
+  setPieceInState(state, 3, 3, PLAYERS.BLACK)
+  setPieceInState(state, 3, 4, PLAYERS.WHITE)
+}
+
+/**
+ * Creates an intial, default board state
+ */
 function createBoardState() {
 
   let state = []
@@ -30,9 +53,37 @@ function createBoardState() {
     state.push(row)
   }
 
+  // Create Default game state
+  placeDefaultPieces(state)
+
   return state
 }
 
+/**
+ * Returns wether or not this square is available for the current
+ * user to place a piece on
+ */
+function isAvailable(turn, col) {
+
+  // If piece is taken, we can't place a piece here
+  if (col.active) {
+    return false
+  }
+
+  // If it is that players turn and this spot is avialable
+  if (turn === PLAYERS.WHITE && col.isWhiteAvailable) {
+    return true
+  } else if (turn === PLAYERS.BLACK && col.isBlackAvailable) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Launch our board
+ * @type {Vue}
+ */
 var app = new Vue({
   el: '#board-container',
   data: {
@@ -54,6 +105,16 @@ var app = new Vue({
       col.active = true
       col.player = this.turn
 
+      // Mark some things as available
+      let sides = getSides(col.x, col.y, 8, 8)
+      for (let key in sides) {
+        if (this.turn === PLAYERS.WHITE) {
+          this.rows[sides[key][0]][sides[key][1]].isWhiteAvailable = true
+        } else {
+          this.rows[sides[key][0]][sides[key][1]].isBlackAvailable = true
+        }
+      }
+
       // Update turn and score
       if (this.turn === PLAYERS.WHITE) {
         this.turn = PLAYERS.BLACK
@@ -62,28 +123,14 @@ var app = new Vue({
         this.turn = PLAYERS.WHITE
         this.blackScore++
       }
-
-      // Mark some things as available
-      let sides = getSides(col.x, col.y, 8, 8)
-      for (let key in sides) {
-        this.rows[sides[key][0]][sides[key][1]].isWhiteAvailable = true
-        this.rows[sides[key][0]][sides[key][1]].isBlackAvailable = true
-      }
     },
 
     /**
      * Get the class for the square div
      */
     squareClass: function(col) {
-      let isAvailable = false
-      if (this.turn === PLAYERS.WHITE && col.isWhiteAvailable) {
-        isAvailable = true
-      } else if (this.turn === PLAYERS.BLACK && col.isBlackAvailable) {
-        isAvailable = true
-      }
-
       return {
-        'available' : isAvailable
+        'available' : isAvailable(this.turn, col)
       }
     }
   },

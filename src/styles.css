@@ -54,7 +54,7 @@ h1, h2, h3 {
   background: #3b536b;
 }
 
-.square:hover {
+.square.available:hover {
   transform: translateY(-8px);
   background: #3b536b;
 }
