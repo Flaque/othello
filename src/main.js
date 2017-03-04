@@ -2,15 +2,8 @@ import "flexboxgrid/css/flexboxgrid.min.css"
 import "./styles.css"
 import Vue from './vendor/vue.js'
 import {getSides} from './grid_utils.js'
-
-const PLAYERS = {
-  BLACK: "black",
-  WHITE: "white",
-  EMPTY: "empty"
-}
-
-const WIDTH = 8
-const HEIGHT = 8
+import {acrossFrom} from './acrossFrom.js'
+import * as consts from './constants'
 
 function setPieceInState(state, x, y, player) {
   state[x][y].player = player
@@ -26,10 +19,14 @@ function setPieceInState(state, x, y, player) {
  *
  */
 function placeDefaultPieces(state) {
-  setPieceInState(state, 2, 3, PLAYERS.WHITE)
-  setPieceInState(state, 2, 4, PLAYERS.BLACK)
-  setPieceInState(state, 3, 3, PLAYERS.BLACK)
-  setPieceInState(state, 3, 4, PLAYERS.WHITE)
+  setPieceInState(state, 2, 3, consts.PLAYERS.WHITE)
+  setPieceInState(state, 2, 4, consts.PLAYERS.BLACK)
+  setPieceInState(state, 3, 3, consts.PLAYERS.BLACK)
+  setPieceInState(state, 3, 4, consts.PLAYERS.WHITE)
+  setAvailable(consts.PLAYERS.WHITE, state, 2, 3)
+  setAvailable(consts.PLAYERS.BLACK, state, 2, 4)
+  setAvailable(consts.PLAYERS.BLACK, state, 3, 3)
+  setAvailable(consts.PLAYERS.WHITE, state, 3, 4)
 }
 
 /**
@@ -38,11 +35,11 @@ function placeDefaultPieces(state) {
 function createBoardState() {
 
   let state = []
-  for (let x = 0; x < WIDTH; x++) {
+  for (let x = 0; x < consts.WIDTH; x++) {
     let row = []
-    for (let y = 0; y < HEIGHT; y++) {
+    for (let y = 0; y < consts.HEIGHT; y++) {
       row.push({
-        player: PLAYERS.EMPTY,
+        player: consts.PLAYERS.EMPTY,
         active: false,
         isWhiteAvailable: false,
         isBlackAvailable: false,
@@ -71,13 +68,25 @@ function isAvailable(turn, col) {
   }
 
   // If it is that players turn and this spot is avialable
-  if (turn === PLAYERS.WHITE && col.isWhiteAvailable) {
+  if (turn === consts.PLAYERS.WHITE && col.isWhiteAvailable) {
     return true
-  } else if (turn === PLAYERS.BLACK && col.isBlackAvailable) {
+  } else if (turn === consts.PLAYERS.BLACK && col.isBlackAvailable) {
     return true
   }
 
   return false
+}
+
+function setAvailable(turn, rows, x, y) {
+  let items = acrossFrom(rows, x, y)
+
+  for (let {x, y} of items) {
+    if (turn === consts.PLAYERS.BLACK)
+      rows[x][y].isBlackAvailable = true
+    else
+      rows[x][y].isWhiteAvailable = true
+  }
+  return rows
 }
 
 /**
@@ -88,7 +97,7 @@ var app = new Vue({
   el: '#board-container',
   data: {
     rows: createBoardState(),
-    turn: 'black',
+    turn: consts.PLAYERS.BLACK,
     blackScore: 0,
     whiteScore: 0
   },
@@ -98,31 +107,24 @@ var app = new Vue({
      * Places a piece. Woopdy doodah
      */
     placePiece: function(col, event) {
-      if (col.player != PLAYERS.EMPTY) {
+      if (col.player != consts.PLAYERS.EMPTY) {
         return // Don't do anything on a filled cell
       }
 
       col.active = true
       col.player = this.turn
 
-      // Mark some things as available
-      let sides = getSides(col.x, col.y, 8, 8)
-      for (let key in sides) {
-        if (this.turn === PLAYERS.WHITE) {
-          this.rows[sides[key][0]][sides[key][1]].isWhiteAvailable = true
-        } else {
-          this.rows[sides[key][0]][sides[key][1]].isBlackAvailable = true
-        }
-      }
+      setAvailable(this.turn, this.rows, col.x, col.y)
 
       // Update turn and score
-      if (this.turn === PLAYERS.WHITE) {
-        this.turn = PLAYERS.BLACK
+      if (this.turn === consts.PLAYERS.WHITE) {
+        this.turn = consts.PLAYERS.BLACK
         this.whiteScore++
       } else {
-        this.turn = PLAYERS.WHITE
+        this.turn = consts.PLAYERS.WHITE
         this.blackScore++
       }
+
     },
 
     /**
