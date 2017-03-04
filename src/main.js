@@ -2,7 +2,7 @@ import "flexboxgrid/css/flexboxgrid.min.css"
 import "./styles.css"
 import Vue from './vendor/vue.js'
 import {getSides} from './grid_utils.js'
-import {acrossFrom} from './acrossFrom.js'
+import {pathFrom} from './pathFrom.js'
 import * as consts from './constants'
 
 function setPieceInState(state, x, y, player) {
@@ -19,14 +19,24 @@ function setPieceInState(state, x, y, player) {
  *
  */
 function placeDefaultPieces(state) {
-  setPieceInState(state, 2, 3, consts.PLAYERS.WHITE)
-  setPieceInState(state, 2, 4, consts.PLAYERS.BLACK)
-  setPieceInState(state, 3, 3, consts.PLAYERS.BLACK)
-  setPieceInState(state, 3, 4, consts.PLAYERS.WHITE)
-  setAvailable(consts.PLAYERS.WHITE, state, 2, 3)
-  setAvailable(consts.PLAYERS.BLACK, state, 2, 4)
-  setAvailable(consts.PLAYERS.BLACK, state, 3, 3)
-  setAvailable(consts.PLAYERS.WHITE, state, 3, 4)
+
+  let pieces = [
+    {x: 2, y: 3, color: consts.PLAYERS.WHITE},
+    {x: 2, y: 4, color: consts.PLAYERS.BLACK},
+    {x: 3, y: 3, color: consts.PLAYERS.BLACK},
+    {x: 3, y: 4, color: consts.PLAYERS.WHITE},
+  ]
+
+  // Sets a bunch of pieces on the board
+  for (let {x, y, color} of pieces) {
+    setPieceInState(state, x, y, color)
+  }
+
+  // Now check if those pieces have available points
+  for (let {x, y, color} of pieces) {
+    let items = pathFrom(state, x, y)
+    setAvailable(color, state, items)
+  }
 }
 
 /**
@@ -63,7 +73,7 @@ function createBoardState() {
 function isAvailable(turn, col) {
 
   // If piece is taken, we can't place a piece here
-  if (col.active) {
+  if (col.player != consts.PLAYERS.EMPTY) {
     return false
   }
 
@@ -77,16 +87,39 @@ function isAvailable(turn, col) {
   return false
 }
 
-function setAvailable(turn, rows, x, y) {
-  let items = acrossFrom(rows, x, y)
+/**
+ * Sets a bunch of items to be available
+ */
+function setAvailable(turn, rows, items) {
 
-  for (let {x, y} of items) {
-    if (turn === consts.PLAYERS.BLACK)
-      rows[x][y].isBlackAvailable = true
-    else
-      rows[x][y].isWhiteAvailable = true
+  for (let path of items) {
+    let {x, y} = path.slice(-1)[0] // Last item in the path is empty
+
+    setSquareAvailable(turn, rows, x, y)
   }
-  return rows
+}
+
+/**
+ * Sets a specific square available
+ */
+function setSquareAvailable(turn, rows, x, y) {
+  if (turn === consts.PLAYERS.BLACK)
+    rows[x][y].isBlackAvailable = true
+  else
+    rows[x][y].isWhiteAvailable = true
+}
+
+/**
+ * Flips the squares along a path
+ */
+function flipSquares(self, path) {
+  for (let {x, y} of path[0]) {
+    self.rows[x][y].player = self.turn
+  }
+
+  for (let {x, y} of path[0]) {
+    setSquareAvailable(self.turn, self.rows, x, y)
+  }
 }
 
 /**
@@ -111,10 +144,13 @@ var app = new Vue({
         return // Don't do anything on a filled cell
       }
 
-      col.active = true
       col.player = this.turn
+      col.active = true
 
-      setAvailable(this.turn, this.rows, col.x, col.y)
+      // Set newly available moves
+      let path = pathFrom(this.rows, col.x, col.y)
+      setAvailable(this.turn, this.rows, path)
+      flipSquares(this, path)
 
       // Update turn and score
       if (this.turn === consts.PLAYERS.WHITE) {
@@ -124,7 +160,6 @@ var app = new Vue({
         this.turn = consts.PLAYERS.WHITE
         this.blackScore++
       }
-
     },
 
     /**

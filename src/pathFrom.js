@@ -13,14 +13,17 @@ function isEmpty(grid, x, y) {
 
 function searchDown(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
-  let hasMiddlePiece = false
+  let path = []
 
   for (let i = y; i < consts.HEIGHT; i++) {
     if (isEmpty(grid, x, i)) {
-      if (hasMiddlePiece) return {x, y: i} //Found an empty slot!
+      if (path.length > 0) {
+        path.push({x, y: i})
+        return path //Found an empty slot!
+      }
       else return false
     } else if (grid[x][i].player === oppositePiece) {
-      hasMiddlePiece = true
+      path.push({x, y: i})
     }
   }
 
@@ -29,14 +32,17 @@ function searchDown(grid, x, y) {
 
 function searchUp(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
-  let hasMiddlePiece = false
+  let path = []
 
   for (let i = y; i > 0; i--) {
     if (isEmpty(grid, x, i)) {
-      if (hasMiddlePiece) return {x, y: i} //Found an empty slot!
+      if (path.length > 0) {
+        path.push({x, y: i})
+        return path //Found an empty slot!
+      }
       else return false
     } else if (grid[x][i].player === oppositePiece) {
-      hasMiddlePiece = true
+      path.push({x, y: i})
     }
   }
 
@@ -45,14 +51,17 @@ function searchUp(grid, x, y) {
 
 function searchLeft(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
-  let hasMiddlePiece = false
+  let path = []
 
   for (let i = x; i > 0; i--) {
     if (isEmpty(grid, i, y)) {
-      if (hasMiddlePiece) return {x: i, y} //Found an empty slot!
+      if (path.length > 0) {
+        path.push({x: i, y})
+        return path //Found an empty slot!
+      }
       else return false
     } else if (grid[i][y].player === oppositePiece) {
-      hasMiddlePiece = true
+      path.push({x: i, y})
     }
   }
 
@@ -61,14 +70,17 @@ function searchLeft(grid, x, y) {
 
 function searchRight(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
-  let hasMiddlePiece = false
+  let path = []
 
   for (let i = x; i < consts.WIDTH; i++) {
     if (isEmpty(grid, i, y)) {
-      if (hasMiddlePiece) return {x: i, y} //Found an empty slot!
+      if (path.length > 0) {
+        path.push({x: i, y})
+        return path //Found an empty slot!
+      }
       else return false
     } else if (grid[i][y].player === oppositePiece) {
-      hasMiddlePiece = true
+      path.push({x: i, y})
     }
   }
 
@@ -81,7 +93,7 @@ function searchRight(grid, x, y) {
  * a specific piece. Basically just the ones
  * that are across from the piece.
  */
-export function acrossFrom(grid, x, y) {
+export function pathFrom(grid, x, y) {
   let possiblePoints = [
     searchUp(grid, x, y),
     searchDown(grid, x, y),
