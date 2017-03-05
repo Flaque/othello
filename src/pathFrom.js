@@ -11,7 +11,7 @@ function isEmpty(grid, x, y) {
   return grid[x][y].player === consts.PLAYERS.EMPTY
 }
 
-function searchDown(grid, x, y) {
+export function searchDown(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
   let path = []
 
@@ -30,7 +30,7 @@ function searchDown(grid, x, y) {
   return false
 }
 
-function searchUp(grid, x, y) {
+export function searchUp(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
   let path = []
 
@@ -49,7 +49,7 @@ function searchUp(grid, x, y) {
   return false
 }
 
-function searchLeft(grid, x, y) {
+export function searchLeft(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
   let path = []
 
@@ -68,7 +68,7 @@ function searchLeft(grid, x, y) {
   return false
 }
 
-function searchRight(grid, x, y) {
+export function searchRight(grid, x, y) {
   let oppositePiece = getOppositePiece(grid, x, y)
   let path = []
 

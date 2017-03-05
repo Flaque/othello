@@ -1,7 +1,6 @@
 import "flexboxgrid/css/flexboxgrid.min.css"
 import "./styles.css"
 import Vue from './vendor/vue.js'
-import {getSides} from './grid_utils.js'
 import {pathFrom} from './pathFrom.js'
 import * as consts from './constants'
 
@@ -99,6 +98,17 @@ function setAvailable(turn, rows, items) {
   }
 }
 
+function setAllAvailable(rows) {
+  for (let row of rows) {
+    for (let col of row) {
+      if (col.player !== consts.PLAYERS.EMPTY) {
+        let paths = pathFrom(rows, col.x, col.y)
+        setAvailable(col.player, rows, paths)
+      }
+    }
+  }
+}
+
 /**
  * Sets a specific square available
  */
@@ -117,9 +127,6 @@ function flipSquares(self, path) {
     self.rows[x][y].player = self.turn
   }
 
-  for (let {x, y} of path[0]) {
-    setSquareAvailable(self.turn, self.rows, x, y)
-  }
 }
 
 /**
@@ -149,8 +156,8 @@ var app = new Vue({
 
       // Set newly available moves
       let path = pathFrom(this.rows, col.x, col.y)
-      setAvailable(this.turn, this.rows, path)
       flipSquares(this, path)
+      setAllAvailable(this.rows)
 
       // Update turn and score
       if (this.turn === consts.PLAYERS.WHITE) {
