@@ -22,3 +22,11 @@ test("can create a grid from a string", () => {
   expect(board[0][0].player).toBe(consts.PLAYERS.BLACK)
   expect(board[1][0].player).toBe(consts.PLAYERS.WHITE)
 })
+
+test("test is edge", () => {
+  expect(utils.isEdge(7, 5)).toBe(true)
+  expect(utils.isEdge(3, 5)).toBe(false)
+  expect(utils.isEdge(3, 0)).toBe(true)
+  expect(utils.isEdge(3, 7)).toBe(true)
+  expect(utils.isEdge(0, 1)).toBe(true)
+})

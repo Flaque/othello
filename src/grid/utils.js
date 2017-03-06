@@ -1,5 +1,22 @@
 let grid = require('./grid.js')
+import * as consts from '../constants'
 
+
+/**
+ * Creates a grid from a string like this:
+ * ```
+     ********
+     ********
+     ********
+     ********
+     ********
+     ********
+     ********
+     bw******
+ * ```
+ *
+ * Where b is black, w is white and * is an empty space
+ */
 export function gridFromString(string) {
   let board = grid.createEmpty()
 
@@ -19,4 +36,8 @@ export function gridFromString(string) {
 
 
   return board
+}
+
+export function isEdge(x, y) {
+  return x === 0 || x === consts.WIDTH-1 || y === 0 || y === consts.HEIGHT-1
 }
