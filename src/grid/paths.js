@@ -19,6 +19,14 @@ export const right = (x, y) => _.range(x+1, consts.WIDTH)
 export const left = (x, y) => _.rangeRight(x)
   .map((x) => { return {x, y} })
 
+function containsOpposite(grid, path, color) {
+  for (let {x, y} of path) {
+    if (grid[x][y].player === consts.PLAYERS.EMPTY) continue
+    if (grid[x][y].player != color) return true
+  }
+  return false
+}
+
 /**
  * Standardizes a path and checks if it truly exists.
  * If it does, the last element will be an empty cell.
@@ -52,6 +60,7 @@ export function confirmPath(grid, path, color) {
   if (badPath) return false
   if (trimmedPath.length === 0 || _.isEmpty(trimmedPath[0]))
     return false
+  if (!containsOpposite(grid, trimmedPath, color)) return false
   return trimmedPath
 }
 
@@ -59,12 +68,14 @@ export function confirmPath(grid, path, color) {
  * Gets a all the paths available to a point.
  */
 export function getPaths(grid, x, y) {
-  let paths = [
-    confirmPath(up(x,y)),
-    confirmPath(down(x,y)),
-    confirmPath(right(x,y)),
-    confirmPath(left(x,y))
+
+  let color = grid[x][y].player
+  let ps = [
+    confirmPath(grid, up(x,y), color),
+    confirmPath(grid, down(x,y), color),
+    confirmPath(grid, right(x,y), color),
+    confirmPath(grid, left(x,y), color)
   ]
 
-  possiblePoints.filter(point => point != false)
+  return ps.filter(point => point != false)
 }

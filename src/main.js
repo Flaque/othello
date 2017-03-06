@@ -1,8 +1,10 @@
 import "flexboxgrid/css/flexboxgrid.min.css"
 import "./styles.css"
 import Vue from './vendor/vue.js'
-import {pathFrom} from './pathFrom.js'
 import * as consts from './constants'
+let grid = require('./grid/grid.js')
+let grid_utils = require('./grid/utils.js')
+let paths = require('./grid/paths.js')
 
 function setPieceInState(state, x, y, player) {
   state[x][y].player = player
@@ -11,56 +13,22 @@ function setPieceInState(state, x, y, player) {
 }
 
 /**
- * Places the default pattern:
- *
- *   xo
- *   ox
- *
- */
-function placeDefaultPieces(state) {
-
-  let pieces = [
-    {x: 2, y: 3, color: consts.PLAYERS.WHITE},
-    {x: 2, y: 4, color: consts.PLAYERS.BLACK},
-    {x: 3, y: 3, color: consts.PLAYERS.BLACK},
-    {x: 3, y: 4, color: consts.PLAYERS.WHITE},
-  ]
-
-  // Sets a bunch of pieces on the board
-  for (let {x, y, color} of pieces) {
-    setPieceInState(state, x, y, color)
-  }
-
-  // Now check if those pieces have available points
-  for (let {x, y, color} of pieces) {
-    let items = pathFrom(state, x, y)
-    setAvailable(color, state, items)
-  }
-}
-
-/**
  * Creates an intial, default board state
  */
 function createBoardState() {
 
-  let state = []
-  for (let x = 0; x < consts.WIDTH; x++) {
-    let row = []
-    for (let y = 0; y < consts.HEIGHT; y++) {
-      row.push({
-        player: consts.PLAYERS.EMPTY,
-        active: false,
-        isWhiteAvailable: false,
-        isBlackAvailable: false,
-        x: x,
-        y: y
-      })
-    }
-    state.push(row)
-  }
+  let state = grid_utils.gridFromString(`
+    ********
+    ********
+    ********
+    ***wb***
+    ***bw***
+    ********
+    ********
+    ********
+    `)
 
-  // Create Default game state
-  placeDefaultPieces(state)
+  grid.updateAvailable(state)
 
   return state
 }
@@ -143,6 +111,10 @@ var app = new Vue({
   },
   methods: {
 
+    reverse: function(values) {
+      return values.slice().reverse()
+    },
+
     /**
      * Places a piece. Woopdy doodah
      */
@@ -154,10 +126,13 @@ var app = new Vue({
       col.player = this.turn
       col.active = true
 
-      // Set newly available moves
-      let path = pathFrom(this.rows, col.x, col.y)
-      flipSquares(this, path)
-      setAllAvailable(this.rows)
+      // Flip cells
+      console.log(this.rows, col.x, col.y)
+      let routes = paths.getPaths(this.rows, col.x, col.y)
+      grid.flipCells(this.rows, routes)
+
+      // Update the available cells
+      grid.updateAvailable(this.rows)
 
       // Update turn and score
       if (this.turn === consts.PLAYERS.WHITE) {

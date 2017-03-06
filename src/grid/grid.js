@@ -4,6 +4,7 @@
 
 import * as consts from '../constants'
 import _ from 'lodash'
+let paths = require('./paths.js')
 
 export const EMPTY_FORMAT = {
   player: consts.PLAYERS.EMPTY,
@@ -71,8 +72,24 @@ export function activateAvailableCells(grid, paths, turn) {
   }
 }
 
-export function flipCells(grid, paths) {
-  for (let {x, y} of paths) {
-    grid[x][y].player = opposite(grid[x][y].player)
+export function flipCells(grid, routes) {
+  for (let route of routes) {
+    for (let {x, y} of route) {
+      grid[x][y].player = opposite(grid[x][y].player)
+    }
+  }
+}
+
+export function updateAvailable(grid) {
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+
+      // Don't update empty cells
+      if (grid[x][y].player === consts.PLAYERS.EMPTY) continue
+
+      let routes = paths.getPaths(grid, x, y)
+      activateAvailableCells(grid, routes, grid[x][y].player)
+
+    }
   }
 }

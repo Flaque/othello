@@ -53,4 +53,7 @@ test("Test confirming a path", () => {
 
   path = paths.confirmPath(board, paths.up(0, 7), "black")
   expect(path).toBe(false)
+  expect(paths.confirmPath(board, paths.down(0, 7), "black")).toBeTruthy()
+  expect(paths.getPaths(board, 0, 7).length).toBeGreaterThan(1)
+
 })
