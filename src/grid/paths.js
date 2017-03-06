@@ -58,13 +58,13 @@ export function confirmPath(grid, path, color) {
 /**
  * Gets a all the paths available to a point.
  */
-function getPaths(grid, x, y) {
+export function getPaths(grid, x, y) {
   let paths = [
-    up(x,y),
-    down(x,y),
-    right(x,y),
-    left(x,y)
+    confirmPath(up(x,y)),
+    confirmPath(down(x,y)),
+    confirmPath(right(x,y)),
+    confirmPath(left(x,y))
   ]
 
-  possiblePoints.filter(point => point.length > 0)
+  possiblePoints.filter(point => point != false)
 }

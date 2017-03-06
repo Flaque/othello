@@ -3,6 +3,7 @@
  */
 
 import * as consts from '../constants'
+import _ from 'lodash'
 
 export const EMPTY_FORMAT = {
   player: consts.PLAYERS.EMPTY,
@@ -17,6 +18,12 @@ export const BLACK_FORMAT = {
 export const WHITE_FORMAT = {
   player: consts.PLAYERS.WHITE,
   active: true,
+}
+
+function opposite(color) {
+  if (color === consts.PLAYERS.WHITE) return consts.PLAYERS.BLACK
+  if (color === consts.PLAYERS.BLACK) return consts.PLAYERS.WHITE
+  else return color
 }
 
 /**
@@ -54,4 +61,18 @@ export function createEmpty() {
   }
 
   return rows
+}
+
+export function activateAvailableCells(grid, paths, turn) {
+  for (let path of paths) {
+    let {x, y} = _.last(path)
+    if (consts.PLAYERS.WHITE === turn) grid[x][y].isWhiteAvailable = true
+    else grid[x][y].isBlackAvailable = true
+  }
+}
+
+export function flipCells(grid, paths) {
+  for (let {x, y} of paths) {
+    grid[x][y].player = opposite(grid[x][y].player)
+  }
 }
