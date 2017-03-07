@@ -9,51 +9,25 @@ test("Test path arrays", () => {
   expect(paths.left(2, 4)).toEqual([{x:1, y:4}, {x: 0, y: 4}])
 })
 
-test("Test confirming a path", () => {
-
-  // Test a bad path
+test("Test finding available points", () => {
   let board = utils.gridFromString(`
     ********
     ********
     ********
-    ********
     b*******
     w*******
     w*******
-    b*******
-    `)
-  expect(paths.confirmPath(board, paths.up(0, 0), "black")).toBe(false)
-
-  // Test a good path
-  board = utils.gridFromString(`
-    ********
-    ********
-    ********
-    ********
-    ********
-    ********
-    w*******
-    b*******
-    `)
-  let path = paths.confirmPath(board, paths.up(0, 0), "black")
-  expect(path).toEqual([{ x: 0, y: 1 }, { x: 0, y: 2 } ])
-
-  // Test an edge path
-
-  board = utils.gridFromString(`
-    b*******
-    ********
-    ********
-    ********
-    ********
-    ********
-    ********
-    ********
+    w******
+    bw******
     `)
 
-  path = paths.confirmPath(board, paths.up(0, 7), "black")
-  expect(path).toBe(false)
-  expect(paths.confirmPath(board, paths.down(0, 7), "black")).toBeTruthy()
-  expect(paths.getPaths(board, 0, 7).length).toBeGreaterThan(1)
+  let right = paths.right(0, 0)
+  let result = paths.getAvailable(board, right, 'black')
+  expect(result).toBeTruthy()
+  expect(result.x).toBe(2)
+  expect(result.y).toBe(0)
 
+  let up = paths.up(0,0)
+  let upResult = paths.getFlipPath(board, up, 'black')
+  expect(upResult.length).toBe(3)
 })

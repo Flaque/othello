@@ -64,18 +64,61 @@ export function confirmPath(grid, path, color) {
   return trimmedPath
 }
 
+export function getAvailable(grid, path, color) {
+
+  let foundOpposite = false
+
+  for (let {x, y} of path) {
+    if (grid[x][y].player === consts.PLAYERS.EMPTY) {
+      return (foundOpposite) ? {x, y} : false
+    }
+    if (grid[x][y].player === color) return false
+    if (grid[x][y].player !== color) foundOpposite = true
+  }
+
+  return false
+}
+
+/**
+ * Gets the indices of items that should be flipped
+ */
+export function getFlipPath(grid, path, color) {
+  let subpath = []
+
+  for (let {x, y} of path) {
+    if (grid[x][y].player === consts.PLAYERS.EMPTY) return subpath
+    if (grid[x][y].player === color) return subpath
+    if (grid[x][y].player !== color) subpath.push({x, y})
+  }
+
+  return subpath
+}
+
 /**
  * Gets a all the paths available to a point.
  */
 export function getPaths(grid, x, y) {
 
   let color = grid[x][y].player
-  let ps = [
-    confirmPath(grid, up(x,y), color),
-    confirmPath(grid, down(x,y), color),
-    confirmPath(grid, right(x,y), color),
-    confirmPath(grid, left(x,y), color)
+  let routes = [
+    getAvailable(grid, up(x,y), color),
+    getAvailable(grid, down(x,y), color),
+    getAvailable(grid, right(x,y), color),
+    getAvailable(grid, left(x,y), color)
   ]
 
-  return ps.filter(point => point != false)
+  return routes.filter(point => point != false)
+}
+
+export function getFlipPaths(grid, x, y) {
+  let color = grid[x][y].player
+
+  let routes = [
+    getFlipPath(grid, up(x,y), color),
+    getFlipPath(grid, down(x,y), color),
+    getFlipPath(grid, right(x,y), color),
+    getFlipPath(grid, left(x,y), color)
+  ]
+
+  return routes.filter(path => path.length >= 1)
 }

@@ -126,13 +126,10 @@ var app = new Vue({
       col.player = this.turn
       col.active = true
 
-      // Flip cells
-      console.log(this.rows, col.x, col.y)
-      let routes = paths.getPaths(this.rows, col.x, col.y)
-      grid.flipCells(this.rows, routes)
+      grid.updateFlips(this.rows, col.x, col.y)
 
-      // Update the available cells
       grid.updateAvailable(this.rows)
+
 
       // Update turn and score
       if (this.turn === consts.PLAYERS.WHITE) {
