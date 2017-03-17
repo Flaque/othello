@@ -66,7 +66,7 @@ export function createEmpty() {
 
 export function activateAvailableCells(grid, paths, turn) {
   for (let {x, y} of paths) {
-    if (consts.PLAYERS.WHITE === turn)  grid[x][y].isWhiteAvailable = true
+    if (consts.PLAYERS.WHITE === turn) grid[x][y].isWhiteAvailable = true
     else grid[x][y].isBlackAvailable = true
   }
 }
@@ -74,13 +74,23 @@ export function activateAvailableCells(grid, paths, turn) {
 export function flipCells(grid, paths, color) {
   for (let path of paths) {
     for (let {x, y} of path) {
-      console.log(x, y)
       grid[x][y].player = color
     }
   }
 }
 
+function wipeAvailable(grid) {
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      grid[x][y].isWhiteAvailable = false
+      grid[x][y].isBlackAvailable = false
+    }
+  }
+}
+
 export function updateAvailable(grid) {
+  wipeAvailable(grid)
+
   for (let x = 0; x < grid.length; x++) {
     for (let y = 0; y < grid[0].length; y++) {
 
@@ -97,6 +107,4 @@ export function updateFlips(grid, x, y) {
   let color = grid[x][y].player
   let routes = paths.getFlipPaths(grid, x, y)
   flipCells(grid, routes, color)
-
-  console.log(grid)
 }

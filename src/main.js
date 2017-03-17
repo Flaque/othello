@@ -127,9 +127,7 @@ var app = new Vue({
       col.active = true
 
       grid.updateFlips(this.rows, col.x, col.y)
-
       grid.updateAvailable(this.rows)
-
 
       // Update turn and score
       if (this.turn === consts.PLAYERS.WHITE) {
