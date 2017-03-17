@@ -7,6 +7,7 @@ test("Test path arrays", () => {
   expect(paths.down(2, 2)).toEqual([{x: 2, y:1}, {x:2, y:0}])
   expect(paths.right(6, 4)).toEqual([{x:7, y:4}])
   expect(paths.left(2, 4)).toEqual([{x:1, y:4}, {x: 0, y: 4}])
+  expect(paths.upRight(5, 5)).toEqual([{x:6, y:6}, {x:7, y:7}])
 })
 
 test("Test finding available points", () => {

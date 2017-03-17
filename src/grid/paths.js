@@ -19,6 +19,18 @@ export const right = (x, y) => _.range(x+1, consts.WIDTH)
 export const left = (x, y) => _.rangeRight(x)
   .map((x) => { return {x, y} })
 
+export const upRight = (x, y) => {
+  let xs = _.range(x+1, consts.WIDTH)
+  let ys = _.range(y+1, consts.HEIGHT)
+  let array = _.zip(xs, ys) // Combine into [[x, y], [x, y], ...] pairs
+    .map(([x, y]) => { return {x, y} }) // Make objects [{x: 2, y: 3}, ...]
+
+  // Kill any odd ones out (since we can wind up with {x: 7, y: undefined})
+  return _.dropRightWhile(array, ({x, y}) => {
+    return x === undefined || y === undefined
+  })
+}
+
 function containsOpposite(grid, path, color) {
   for (let {x, y} of path) {
     if (grid[x][y].player === consts.PLAYERS.EMPTY) continue
