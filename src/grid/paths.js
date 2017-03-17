@@ -4,6 +4,19 @@ let utils = require('./utils.js')
 
 
 /**
+ * Helper function to combine xs and ys from ranges for path functions
+ */
+function combineXsYs(xs, ys) {
+  let array = _.zip(xs, ys) // Combine into [[x, y], [x, y], ...] pairs
+    .map(([x, y]) => { return {x, y} }) // Make objects [{x: 2, y: 3}, ...]
+
+  // Kill any odd ones out (since we can wind up with {x: 7, y: undefined})
+  return _.dropRightWhile(array, ({x, y}) => {
+    return x === undefined || y === undefined
+  })
+}
+
+/**
  * Define a bunch of path arrays
  */
 
@@ -20,15 +33,27 @@ export const left = (x, y) => _.rangeRight(x)
   .map((x) => { return {x, y} })
 
 export const upRight = (x, y) => {
-  let xs = _.range(x+1, consts.WIDTH)
-  let ys = _.range(y+1, consts.HEIGHT)
-  let array = _.zip(xs, ys) // Combine into [[x, y], [x, y], ...] pairs
-    .map(([x, y]) => { return {x, y} }) // Make objects [{x: 2, y: 3}, ...]
+  const xs = _.range(x+1, consts.WIDTH)
+  const ys = _.range(y+1, consts.HEIGHT)
+  return combineXsYs(xs, ys)
+}
 
-  // Kill any odd ones out (since we can wind up with {x: 7, y: undefined})
-  return _.dropRightWhile(array, ({x, y}) => {
-    return x === undefined || y === undefined
-  })
+export const upLeft = (x, y) => {
+  const xs = _.rangeRight(x)
+  const ys = _.range(y+1, consts.HEIGHT)
+  return combineXsYs(xs, ys)
+}
+
+export const downLeft = (x, y) => {
+  const xs = _.rangeRight(x)
+  const ys = _.rangeRight(y)
+  return combineXsYs(xs, ys)
+}
+
+export const downRight = (x, y) => {
+  const xs = _.range(x+1, consts.WIDTH)
+  const ys = _.rangeRight(y)
+  return combineXsYs(xs, ys)
 }
 
 function containsOpposite(grid, path, color) {
@@ -107,30 +132,35 @@ export function getFlipPath(grid, path, color) {
 }
 
 /**
+ * Helper function to apply a function to all the paths.
+ */
+function getPathsWith(grid, x, y, color, func) {
+  return [
+    func(grid, up(x,y), color),
+    func(grid, down(x,y), color),
+    func(grid, right(x,y), color),
+    func(grid, left(x,y), color),
+
+    func(grid, upRight(x, y), color),
+    func(grid, upLeft(x, y), color),
+    func(grid, downRight(x, y), color),
+    func(grid, downLeft(x, y), color),
+  ]
+}
+
+/**
  * Gets a all the paths available to a point.
  */
 export function getPaths(grid, x, y) {
-
   let color = grid[x][y].player
-  let routes = [
-    getAvailable(grid, up(x,y), color),
-    getAvailable(grid, down(x,y), color),
-    getAvailable(grid, right(x,y), color),
-    getAvailable(grid, left(x,y), color)
-  ]
+  let routes = getPathsWith(grid, x, y, color, getAvailable)
 
   return routes.filter(point => point != false)
 }
 
 export function getFlipPaths(grid, x, y) {
   let color = grid[x][y].player
-
-  let routes = [
-    getFlipPath(grid, up(x,y), color),
-    getFlipPath(grid, down(x,y), color),
-    getFlipPath(grid, right(x,y), color),
-    getFlipPath(grid, left(x,y), color)
-  ]
+  let routes = getPathsWith(grid, x, y, color, getFlipPath)
 
   return routes.filter(path => path.length >= 1)
 }
