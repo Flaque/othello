@@ -28,3 +28,7 @@ test('grid can add a piece to itself', () => {
   grid.setCell(board, 1, 1, grid.EMPTY_FORMAT)
   expect(board[1][1].player).toBe(consts.PLAYERS.EMPTY)
 })
+
+test('count colors correctly', () => {
+  
+})

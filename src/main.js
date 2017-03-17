@@ -94,7 +94,6 @@ function flipSquares(self, path) {
   for (let {x, y} of path[0]) {
     self.rows[x][y].player = self.turn
   }
-
 }
 
 /**
@@ -106,8 +105,8 @@ var app = new Vue({
   data: {
     rows: createBoardState(),
     turn: consts.PLAYERS.BLACK,
-    blackScore: 0,
-    whiteScore: 0
+    blackScore: 2,
+    whiteScore: 2
   },
   methods: {
 
@@ -129,14 +128,17 @@ var app = new Vue({
       grid.updateFlips(this.rows, col.x, col.y)
       grid.updateAvailable(this.rows)
 
-      // Update turn and score
+      // Update turn
       if (this.turn === consts.PLAYERS.WHITE) {
         this.turn = consts.PLAYERS.BLACK
-        this.whiteScore++
       } else {
         this.turn = consts.PLAYERS.WHITE
-        this.blackScore++
       }
+
+      // Update Score
+      let {black, white} = grid.countColors(this.rows)
+      this.blackScore = black
+      this.whiteScore = white
     },
 
     /**

@@ -79,6 +79,19 @@ export function flipCells(grid, paths, color) {
   }
 }
 
+export function countColors(grid) {
+  let black = 0
+  let white = 0
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      if (grid[x][y].player === consts.PLAYERS.BLACK) black++;
+      if (grid[x][y].player === consts.PLAYERS.WHITE) white++;
+    }
+  }
+
+  return {black, white}
+}
+
 function wipeAvailable(grid) {
   for (let x = 0; x < grid.length; x++) {
     for (let y = 0; y < grid[0].length; y++) {
