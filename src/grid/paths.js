@@ -123,7 +123,7 @@ export function getFlipPath(grid, path, color) {
   let subpath = []
 
   for (let {x, y} of path) {
-    if (grid[x][y].player === consts.PLAYERS.EMPTY) return subpath
+    if (grid[x][y].player === consts.PLAYERS.EMPTY) return [] // TODO FIX ME
     if (grid[x][y].player === color) return subpath
     if (grid[x][y].player !== color) subpath.push({x, y})
   }
