@@ -6,6 +6,9 @@ let grid = require('./grid/grid.js')
 let grid_utils = require('./grid/utils.js')
 let paths = require('./grid/paths.js')
 
+// Register components
+import whoShouldGoFirst from './components/who-should-go-first.js'
+
 function setPieceInState(state, x, y, player) {
   state[x][y].player = player
   state[x][y].active = true
@@ -106,7 +109,8 @@ var app = new Vue({
     rows: createBoardState(),
     turn: consts.PLAYERS.BLACK,
     blackScore: 2,
-    whiteScore: 2
+    whiteScore: 2,
+    active: false,
   },
   methods: {
 
@@ -152,6 +156,15 @@ var app = new Vue({
       return {
         'available' : isAvailable(this.turn, col)
       }
+    },
+
+    /**
+     * Called when the player selects either their AI or our AI to go first.
+     */
+    handleSelectedPlayer: function(isOurTurn) {
+      this.active = true
+
+      console.log(isOurTurn)
     }
   },
 })

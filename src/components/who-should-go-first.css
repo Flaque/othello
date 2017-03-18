@@ -1,0 +1,16 @@
+.who-should-go-first {
+
+  padding: 20px;
+  background: white;
+  text-align: center;
+  color: #282828;
+  border-radius: 5px;
+}
+
+.who-should-go-first h1 {
+  margin-top: 0;
+}
+
+.who-should-go-first button {
+  cursor: pointer;
+}
