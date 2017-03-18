@@ -8,9 +8,11 @@
 
     <div id="board-container">
 
+
       <div class="middle" v-if="started">
         <div id="labels">
           <h1 class="whos-turn">{{turn}}</h1>
+          <span class="timer" v-if="isOurTurn">{{seconds}}</span>
 
           <div class="right">
             <h3><div class="mini-circle black"></div> <span class="black-label">{{blackScore}}</span></h3>
@@ -25,6 +27,16 @@
             <div class="modal-body">
               <h2>Their AI's about to make a move.</h2>
               <button v-on:click="pickRandomMoveForThem">Okay</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timed Out Screen -->
+        <div class="timedout modal" v-if="timedOut">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h2> You timed out! Looks like you lose. </h2>
+              <h5> Refresh to restart. </h5>
             </div>
           </div>
         </div>

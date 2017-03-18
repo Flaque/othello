@@ -118,6 +118,8 @@ var app = new Vue({
     started: false,
     paused: false,
     weAreBlack: undefined,
+    seconds: 10,
+    timedOut: false
   },
 
   computed: {
@@ -151,7 +153,10 @@ var app = new Vue({
       grid.updateAvailable(this.rows)
 
       // Pause for the AI player ask our permission
-      if (this.isOurTurn) this.paused = true
+      if (this.isOurTurn) {
+        this.seconds = 10
+        this.paused = true
+      }
 
       // Update turn
       if (this.turn === WHITE) {
@@ -164,6 +169,9 @@ var app = new Vue({
       let {black, white} = grid.countColors(this.rows)
       this.blackScore = black
       this.whiteScore = white
+
+      // Now lets start the timer for the next turn
+      if (this.isOurTurn) this.tickTimer()
     },
 
     /**
@@ -182,6 +190,7 @@ var app = new Vue({
       this.started = true
       this.weAreBlack = isOurTurn
       this.paused = !isOurTurn
+      if (isOurTurn) { this.tickTimer() }
     },
 
     pickRandomMoveForThem: function() {
@@ -191,6 +200,18 @@ var app = new Vue({
       this.placePiece(random)
 
       this.paused = false
+    },
+
+    tickTimer: function(){
+      if (!this.isOurTurn) {
+        this.seconds = 10 // Reset timer
+        return
+      }
+
+      this.seconds -= 1
+
+      if (this.seconds <= 0) this.timedOut = true
+      else setTimeout(this.tickTimer, 1000)
     }
   },
 })
