@@ -122,6 +122,10 @@ var app = new Vue({
         return // Don't do anything on a filled cell
       }
 
+      if (!col.isBlackAvailable && !col.isWhiteAvailable) return
+      if (this.turn === consts.PLAYERS.WHITE && !col.isWhiteAvailable) return
+      if (this.turn === consts.PLAYERS.BLACK && !col.isBlackAvailable) return
+
       col.player = this.turn
       col.active = true
 
