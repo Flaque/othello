@@ -101,6 +101,20 @@ function wipeAvailable(grid) {
   }
 }
 
+export function getAvailable(grid, color) {
+  let availables = []
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      if (color === consts.PLAYERS.BLACK && grid[x][y].isBlackAvailable) {
+        availables.push(grid[x][y])
+      } else if (color === consts.PLAYERS.WHITE && grid[x][y].isWhiteAvailable){
+        availables.push(grid[x][y])
+      }
+    }
+  }
+  return availables
+}
+
 export function updateAvailable(grid) {
   wipeAvailable(grid)
 

@@ -110,3 +110,29 @@ h1, h2, h3 {
 .board .square .circle.active {
   display: block;
 }
+
+.modal {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 1, 1, .5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 15%;
+
+}
+
+.modal .modal-content {
+  background: white;
+  opacity: 1;
+  width: 400px;
+  padding: 10px;
+  color: #282828;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+}

@@ -6,6 +6,11 @@ let grid = require('./grid/grid.js')
 let grid_utils = require('./grid/utils.js')
 let paths = require('./grid/paths.js')
 
+// Useful Aliases
+const BLACK = consts.PLAYERS.BLACK
+const WHITE = consts.PLAYERS.WHITE
+const EMPTY = consts.PLAYERS.EMPTY
+
 // Register components
 import whoShouldGoFirst from './components/who-should-go-first.js'
 
@@ -43,14 +48,14 @@ function createBoardState() {
 function isAvailable(turn, col) {
 
   // If piece is taken, we can't place a piece here
-  if (col.player != consts.PLAYERS.EMPTY) {
+  if (col.player != EMPTY) {
     return false
   }
 
   // If it is that players turn and this spot is avialable
-  if (turn === consts.PLAYERS.WHITE && col.isWhiteAvailable) {
+  if (turn === WHITE && col.isWhiteAvailable) {
     return true
-  } else if (turn === consts.PLAYERS.BLACK && col.isBlackAvailable) {
+  } else if (turn === BLACK && col.isBlackAvailable) {
     return true
   }
 
@@ -72,7 +77,7 @@ function setAvailable(turn, rows, items) {
 function setAllAvailable(rows) {
   for (let row of rows) {
     for (let col of row) {
-      if (col.player !== consts.PLAYERS.EMPTY) {
+      if (col.player !== EMPTY) {
         let paths = pathFrom(rows, col.x, col.y)
         setAvailable(col.player, rows, paths)
       }
@@ -84,7 +89,7 @@ function setAllAvailable(rows) {
  * Sets a specific square available
  */
 function setSquareAvailable(turn, rows, x, y) {
-  if (turn === consts.PLAYERS.BLACK)
+  if (turn === BLACK)
     rows[x][y].isBlackAvailable = true
   else
     rows[x][y].isWhiteAvailable = true
@@ -110,7 +115,16 @@ var app = new Vue({
     turn: consts.PLAYERS.BLACK,
     blackScore: 2,
     whiteScore: 2,
-    active: false,
+    started: false,
+    paused: false,
+    weAreBlack: undefined,
+  },
+
+  computed: {
+    isOurTurn() {
+      return ((this.turn === BLACK && this.weAreBlack) || (this.turn === WHITE &&
+        !this.weAreBlack))
+    }
   },
   methods: {
 
@@ -121,14 +135,14 @@ var app = new Vue({
     /**
      * Places a piece. Woopdy doodah
      */
-    placePiece: function(col, event) {
-      if (col.player != consts.PLAYERS.EMPTY) {
+    placePiece: function(col) {
+      if (col.player != EMPTY) {
         return // Don't do anything on a filled cell
       }
 
       if (!col.isBlackAvailable && !col.isWhiteAvailable) return
-      if (this.turn === consts.PLAYERS.WHITE && !col.isWhiteAvailable) return
-      if (this.turn === consts.PLAYERS.BLACK && !col.isBlackAvailable) return
+      if (this.turn === WHITE && !col.isWhiteAvailable) return
+      if (this.turn === BLACK && !col.isBlackAvailable) return
 
       col.player = this.turn
       col.active = true
@@ -136,11 +150,14 @@ var app = new Vue({
       grid.updateFlips(this.rows, col.x, col.y)
       grid.updateAvailable(this.rows)
 
+      // Pause for the AI player ask our permission
+      if (this.isOurTurn) this.paused = true
+
       // Update turn
-      if (this.turn === consts.PLAYERS.WHITE) {
-        this.turn = consts.PLAYERS.BLACK
+      if (this.turn === WHITE) {
+        this.turn = BLACK
       } else {
-        this.turn = consts.PLAYERS.WHITE
+        this.turn = WHITE
       }
 
       // Update Score
@@ -162,9 +179,18 @@ var app = new Vue({
      * Called when the player selects either their AI or our AI to go first.
      */
     handleSelectedPlayer: function(isOurTurn) {
-      this.active = true
+      this.started = true
+      this.weAreBlack = isOurTurn
+      this.paused = !isOurTurn
+    },
 
-      console.log(isOurTurn)
+    pickRandomMoveForThem: function() {
+      if (this.isOurTurn) throw "Can't pick a random move on our turn!"
+
+      let random = _.sample(grid.getAvailable(this.rows, this.turn))
+      this.placePiece(random)
+
+      this.paused = false
     }
   },
 })
