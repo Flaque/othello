@@ -21,10 +21,9 @@
         <!-- Paused screen -->
 
         <div class="pause modal" v-if="paused">
-          <div class="modal-content" v-on:keyup.enter="pickRandomMoveForThem">
+          <div class="modal-content">
             <div class="modal-body">
               <h2>Their AI's about to make a move.</h2>
-              <p>(Hint) You can press enter to continue. </p>
               <button v-on:click="pickRandomMoveForThem">Okay</button>
             </div>
           </div>
