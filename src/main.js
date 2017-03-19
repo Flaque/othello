@@ -143,6 +143,11 @@ var app = new Vue({
       return values.slice().reverse()
     },
 
+    toAlpha: function(value) {
+      const letters = ['A','B','C','D','E','F','G','F']
+      return letters[value]
+    },
+
     /**
      * Places a piece. Woopdy doodah
      */

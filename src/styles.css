@@ -86,6 +86,16 @@ h1, h2, h3 {
   margin: 0;
 }
 
+.square {
+  position: relative;
+}
+
+.square .cords {
+  position: absolute;
+  color: #aaa;
+  cursor: inherit;
+}
+
 .square .circle {
   height: 50px;
   width: 50px;
@@ -124,6 +134,11 @@ h1, h2, h3 {
   align-items: flex-start;
   padding: 15%;
 
+}
+
+.shown {
+  visibility: visible;
+  display: block;
 }
 
 .modal .modal-content {
