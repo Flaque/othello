@@ -119,7 +119,9 @@ var app = new Vue({
     paused: false,
     weAreBlack: undefined,
     seconds: 10,
-    timedOut: false
+    timedOut: false,
+    gameover: false,
+    skippedTurn: false
   },
 
   computed: {
@@ -170,6 +172,9 @@ var app = new Vue({
       this.blackScore = black
       this.whiteScore = white
 
+      // Check for gameover
+      if (grid.isFull(this.rows)) { this.gameover = true; return }
+
       // Now lets start the timer for the next turn
       if (this.isOurTurn) this.tickTimer()
     },
@@ -197,9 +202,22 @@ var app = new Vue({
       if (this.isOurTurn) throw "Can't pick a random move on our turn!"
 
       let random = _.sample(grid.getAvailable(this.rows, this.turn))
+
+      // AI can't make a move! (no available cells)
+      if (!random) {
+        this.skippedTurn = true
+        return
+      }
+
       this.placePiece(random)
 
       this.paused = false
+    },
+
+    skipTurn: function() {
+      this.turn = grid.opposite(this.turn)
+      this.skippedTurn = false
+      if (!this.isOurTurn()) { this.pickRandomMoveForThem() }
     },
 
     tickTimer: function(){

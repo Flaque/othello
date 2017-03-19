@@ -20,6 +20,32 @@
           </div>
         </div>
 
+        <!-- Can't make a move Screen-->
+        <div class="no-move modal" v-if="skippedTurn">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h2>No move is possible. Skipping Turn.</h2>
+              <button v-on:click="skipTurn">Okay</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Gameover Screen -->
+        <div class="gameover modal" v-if="gameover">
+          <div class="modal-content">
+            <div class="modal-body" v-if="blackScore > whiteScore">
+              <h2>Gameover! Black wins.</h2>
+            </div>
+            <div class="modal-body" v-if="whiteScore > blackScore">
+              <h2>Gameover! White wins.</h2>
+            </div>
+            <div class="modal-body" v-if="whiteScore == blackScore">
+              <h2>Gameover! It's a tie!</h2>
+            </div>
+          </div>
+        </div>
+
         <!-- Paused screen -->
 
         <div class="pause modal" v-if="paused">

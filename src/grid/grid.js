@@ -21,7 +21,7 @@ export const WHITE_FORMAT = {
   active: true,
 }
 
-function opposite(color) {
+export function opposite(color) {
   if (color === consts.PLAYERS.WHITE) return consts.PLAYERS.BLACK
   if (color === consts.PLAYERS.BLACK) return consts.PLAYERS.WHITE
   else return color
@@ -113,6 +113,13 @@ export function getAvailable(grid, color) {
     }
   }
   return availables
+}
+
+export function isFull(grid) {
+  const blackCells = getAvailable(grid, consts.PLAYERS.BLACK)
+  const whiteCells = getAvailable(grid, consts.PLAYERS.WHITE)
+  if (blackCells.length === 0 && whiteCells.length === 0) return true
+  return false
 }
 
 export function updateAvailable(grid) {
