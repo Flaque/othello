@@ -124,6 +124,13 @@ var app = new Vue({
     skippedTurn: false
   },
 
+  created: function() {
+    let self = this
+    window.addEventListener('keyup', (event, thing) => {
+      if (event.key === "Enter" && !this.isOurTurn) self.pickRandomMoveForThem()
+    })
+  },
+
   computed: {
     isOurTurn() {
       return ((this.turn === BLACK && this.weAreBlack) || (this.turn === WHITE &&
@@ -156,6 +163,7 @@ var app = new Vue({
 
       // Pause for the AI player ask our permission
       if (this.isOurTurn) {
+        clearTimeout(this.timer)
         this.seconds = 10
         this.paused = true
       }
@@ -223,13 +231,14 @@ var app = new Vue({
     tickTimer: function(){
       if (!this.isOurTurn) {
         this.seconds = 10 // Reset timer
+        clearTimeout(this.timer)
         return
       }
 
       this.seconds -= 1
 
       if (this.seconds <= 0) this.timedOut = true
-      else setTimeout(this.tickTimer, 1000)
+      else this.timer = setTimeout(this.tickTimer, 1000)
     }
   },
 })
