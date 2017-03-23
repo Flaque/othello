@@ -78,10 +78,11 @@
 
                 <span class="cords"> {{toAlpha(7-col.y)}}, {{8-col.x}} </span>
 
-               <div class="circle" v-bind:class="{'active': col.active, 'white': col.player === 'white', 'black': col.player === 'black'}">
+               <div class="circle" v-bind:class="{'active': col.active, 'white': col.player === 'white', 'black': col.player === 'black', 'highlighted': col.highlighted === true}">
                </div>
 
-            </div>
+            </div> <!-- end loop -->
+
           </div>
         </div>
 

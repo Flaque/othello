@@ -165,6 +165,8 @@ var app = new Vue({
 
       grid.updateFlips(this.rows, col.x, col.y)
       grid.updateAvailable(this.rows)
+      col.highlighted = true
+
 
       // Pause for the AI player ask our permission
       if (this.isOurTurn) {
@@ -186,10 +188,20 @@ var app = new Vue({
       this.whiteScore = white
 
       // Check for gameover
-      if (grid.isFull(this.rows)) { this.gameover = true; return }
+      if (grid.isFull(this.rows)) {
+        this.gameover = true;
+        this.paused = false;
+        this.timedOut = false;
+        this.skippedTurn = false;
+        return
+      }
 
       // Now lets start the timer for the next turn
       if (this.isOurTurn) this.tickTimer()
+      if (grid.getAvailable(this.rows, this.turn).length <= 0) {
+        this.skipTurn()
+      }
+
     },
 
     /**
@@ -208,11 +220,14 @@ var app = new Vue({
       this.started = true
       this.weAreBlack = isOurTurn
       this.paused = !isOurTurn
-      if (isOurTurn) { this.tickTimer() }
+      if (this.isOurTurn) { this.tickTimer() }
     },
 
     pickRandomMoveForThem: function() {
-      if (this.isOurTurn) throw "Can't pick a random move on our turn!"
+      if (this.isOurTurn) {
+        throw "Can't pick a random move on our turn!"
+        this.skipTurn()
+      }
 
       let random = _.sample(grid.getAvailable(this.rows, this.turn))
 
@@ -230,7 +245,7 @@ var app = new Vue({
     skipTurn: function() {
       this.turn = grid.opposite(this.turn)
       this.skippedTurn = false
-      if (!this.isOurTurn()) { this.pickRandomMoveForThem() }
+      if (!this.isOurTurn) { this.pickRandomMoveForThem() }
     },
 
     tickTimer: function(){

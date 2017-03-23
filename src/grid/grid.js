@@ -72,9 +72,19 @@ export function activateAvailableCells(grid, paths, turn) {
 }
 
 export function flipCells(grid, paths, color) {
+  wipeHighlighted(grid)
   for (let path of paths) {
     for (let {x, y} of path) {
       grid[x][y].player = color
+      grid[x][y].highlighted = true
+    }
+  }
+}
+
+export function wipeHighlighted(grid) {
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      grid[x][y].highlighted = false
     }
   }
 }
