@@ -1,7 +1,7 @@
 /**
- * Grid
+ * Grid butt
  */
-
+ 
 import * as consts from '../constants'
 import _ from 'lodash'
 let paths = require('./paths.js')
