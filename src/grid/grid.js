@@ -1,5 +1,5 @@
 /**
- * Grid butt
+ * Grid
  */
  
 import * as consts from '../constants'
