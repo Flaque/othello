@@ -133,6 +133,12 @@ function moveString(isBlacksMove) {
   return (isBlacksMove) ? "black" : "white"
 }
 
+function minOrMax(isBlacksMove, areWeBlack) {
+  if (isBlacksMove && areWeBlack) return "Max"
+  if (!isBlacksMove && !areWeBlack) return "Max"
+  return "Min"
+}
+
 
 /**
  * Steps:
@@ -155,20 +161,20 @@ function children(board, isBlacksMove, areWeBlack, movesAvailable, parent) {
 
   for (let {x,y} of moves) {
     let name = cordToString({x,y})
-    let board_clone = makeMove(board, x, y, isBlacksMove)
+    let board_clone = makeMove(board, x, y, !isBlacksMove)
 
     let childs = getChildMoves(board_clone, moveString(isBlacksMove))
 
     // if we're reaching the end, let's calculate the leaf nodes
     if (movesAvailable === 1) {
       let endnodes = createChildEndNodes(board_clone, isBlacksMove, childs.moves, childs.keys)
-      graph[name] = [parent, endnodes, undefined, "Max"]
+      graph[name] = [parent, endnodes, undefined, minOrMax(isBlacksMove, areWeBlack)]
     } else {
-      graph[name] = [parent, childs.keys, undefined, "Max"]
+      graph[name] = [parent, childs.keys, undefined, minOrMax(isBlacksMove)]
     }
 
     // Add childs children
-    graph = Object.assign({}, graph, children(board_clone, isBlacksMove, movesAvailable-1, name))
+    graph = Object.assign({}, graph, children(board_clone, !isBlacksMove, areWeBlack, movesAvailable-1, name))
   }
 
   return graph
@@ -190,3 +196,4 @@ let parent = {"root":[undefined, keys, undefined, "Min"]}
 let graph = children(grid, false, true, 5, "root")
 
 console.log(graph)
+// console.log(ABPruning(graph))
