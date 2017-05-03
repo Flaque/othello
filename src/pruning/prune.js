@@ -159,10 +159,6 @@ function children(board, isBlacksMove, areWeBlack, movesAvailable, parent) {
 
     let childs = getChildMoves(board_clone, moveString(isBlacksMove))
 
-    if (childs.keys.length === 0) {
-      console.log(childs, moveString(isBlacksMove))
-    }
-
     // if we're reaching the end, let's calculate the leaf nodes
     if (movesAvailable === 1) {
       let endnodes = createChildEndNodes(board_clone, isBlacksMove, childs.moves, childs.keys)
@@ -191,8 +187,6 @@ let grid = gridFromString(`********
 let {moves, keys} = getChildMoves(grid, 'black')
 let parent = {"root":[undefined, keys, undefined, "Min"]}
 
-let graph = children(grid, false, true, 1, "root")
+let graph = children(grid, false, true, 5, "root")
 
 console.log(graph)
-
-console.log(Object.keys(graph).length)
