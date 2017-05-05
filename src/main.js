@@ -5,6 +5,7 @@ import * as consts from './constants'
 let grid = require('./grid/grid.js')
 let grid_utils = require('./grid/utils.js')
 let paths = require('./grid/paths.js')
+let {ABPruning} = require('./pruning/prune.js')
 
 // Useful Aliases
 const BLACK = consts.PLAYERS.BLACK
@@ -223,7 +224,7 @@ var app = new Vue({
       if (this.isOurTurn) { this.tickTimer() }
     },
 
-    pickRandomMoveForThem: function() {
+    pickMoveForAI: function() {
       if (this.isOurTurn) {
         throw "Can't pick a random move on our turn!"
         this.skipTurn()
@@ -237,6 +238,8 @@ var app = new Vue({
         return
       }
 
+      ABPruning(this.grid)
+
       this.placePiece(random)
 
       this.paused = false
@@ -245,7 +248,7 @@ var app = new Vue({
     skipTurn: function() {
       this.turn = grid.opposite(this.turn)
       this.skippedTurn = false
-      if (!this.isOurTurn) { this.pickRandomMoveForThem() }
+      if (!this.isOurTurn) { this.pickMoveForAI() }
     },
 
     tickTimer: function(){

@@ -1,7 +1,7 @@
 /**
  * Grid
  */
- 
+
 import * as consts from '../constants'
 import _ from 'lodash'
 let paths = require('./paths.js')
@@ -122,6 +122,7 @@ export function getAvailable(grid, color) {
       }
     }
   }
+
   return availables
 }
 

@@ -3,7 +3,7 @@ import './who-should-go-first.css'
 
 const template = `
   <div class="who-should-go-first">
-    <h1> What color would you like to be? </h1>
+    <h1> What color should our oponent be? </h1>
 
     <div class="row">
       <div class="col-xs">
