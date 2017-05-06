@@ -145,7 +145,7 @@ var app = new Vue({
     },
 
     toAlpha: function(value) {
-      const letters = ['A','B','C','D','E','F','G','F']
+      const letters = ['A','B','C','D','E','F','G','H']
       return letters[value]
     },
 
