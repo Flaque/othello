@@ -225,11 +225,6 @@ var app = new Vue({
     },
 
     pickMoveForAI: function() {
-      if (this.isOurTurn) {
-        throw "Can't pick a random move on our turn!"
-        this.skipTurn()
-      }
-
       let random = _.sample(grid.getAvailable(this.rows, this.turn))
 
       // AI can't make a move! (no available cells)
