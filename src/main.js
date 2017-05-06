@@ -171,8 +171,6 @@ var app = new Vue({
 
       // Pause for the AI player ask our permission
       if (this.isOurTurn) {
-        clearTimeout(this.timer)
-        this.seconds = 10
         this.paused = true
       }
 
@@ -198,7 +196,9 @@ var app = new Vue({
       }
 
       // Now lets start the timer for the next turn
-      if (this.isOurTurn) this.tickTimer()
+      clearTimeout(this.timer)
+      this.seconds = 10
+      this.tickTimer()
       if (grid.getAvailable(this.rows, this.turn).length <= 0) {
         this.skipTurn()
       }
@@ -221,7 +221,7 @@ var app = new Vue({
       this.started = true
       this.weAreBlack = isOurTurn
       this.paused = !isOurTurn
-      if (this.isOurTurn) { this.tickTimer() }
+      this.tickTimer()
     },
 
     pickMoveForAI: function() {
@@ -252,11 +252,6 @@ var app = new Vue({
     },
 
     tickTimer: function(){
-      if (!this.isOurTurn) {
-        this.seconds = 10 // Reset timer
-        clearTimeout(this.timer)
-        return
-      }
 
       this.seconds -= 1
 
