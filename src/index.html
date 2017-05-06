@@ -52,7 +52,7 @@
           <div class="modal-content">
             <div class="modal-body">
               <h2>Our AI's about to make a move.</h2>
-              <button v-on:click="pickMoveForAI">Okay</button>
+              <button v-on:click="pickMove">Okay</button>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
             <div class="col-xs square" v-for="col in reverse(row)"
               v-on:click="placePiece(col, $event)" v-bind:class="squareClass(col)">
 
-                <span class="cords"> {{toAlpha(7-col.y)}}, {{8-col.x}} </span>
+                <span class="cords"> {{toAlpha(7-col.y)}}, {{col.x + 1}} </span>
 
                <div class="circle" v-bind:class="{'active': col.active, 'white': col.player === 'white', 'black': col.player === 'black', 'highlighted': col.highlighted === true}">
                </div>

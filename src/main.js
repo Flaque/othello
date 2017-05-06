@@ -145,7 +145,8 @@ var app = new Vue({
     },
 
     toAlpha: function(value) {
-      const letters = ['A','B','C','D','E','F','G','F']
+      //
+      const letters = ['A','B','C','D','E','F','G','H']
       return letters[value]
     },
 
@@ -223,7 +224,9 @@ var app = new Vue({
       this.paused = !isOurTurn
       this.tickTimer()
     },
-
+    pickMove: function() {
+      setTimeout(this.pickMoveForAI, 4000)
+    },
     pickMoveForAI: function() {
       let random = _.sample(grid.getAvailable(this.rows, this.turn))
 
