@@ -224,7 +224,9 @@ var app = new Vue({
       this.paused = !isOurTurn
       this.tickTimer()
     },
-
+    pickMove: function() {
+      setTimeout(this.pickMoveForAI, 4000)
+    },
     pickMoveForAI: function() {
       if (this.isOurTurn) {
         throw "Can't pick a random move on our turn!"
