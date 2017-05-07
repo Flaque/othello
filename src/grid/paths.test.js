@@ -12,6 +12,24 @@ test("Test path arrays", () => {
   expect(paths.downLeft(2, 2)).toEqual([{x:1, y:1}, {x:0, y:0}])
   expect(paths.downRight(6, 1)).toEqual([{x:7, y:0}])
   expect(paths.upLeft(2, 6)).toEqual([{x:1, y:7}])
+
+  console.log(paths.down(0, 1))
+})
+
+test("Last is Empty", () => {
+  let board = utils.gridFromString(`
+    ********
+    ********
+    ********
+    ********
+    ********
+    ********
+    w*******
+    b*******
+    `)
+
+  let down = paths.down(0,1)
+  expect(paths.confirmPath(board, down, 'white')).toBe(false)
 })
 
 test("Test finding available points", () => {

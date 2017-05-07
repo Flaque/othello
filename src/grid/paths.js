@@ -67,6 +67,8 @@ function containsOpposite(grid, path, color) {
 function lastIsEmpty(grid, path) {
   if (path.length === 0) return false
 
+  if (path[path.length - 1].x === undefined) return false
+
   let {x, y} = path[path.length - 1]
   return grid[x][y].player === consts.PLAYERS.EMPTY
 }
