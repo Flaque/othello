@@ -64,6 +64,13 @@ function containsOpposite(grid, path, color) {
   return false
 }
 
+function lastIsEmpty(grid, path) {
+  if (path.length === 0) return false
+
+  let {x, y} = path[path.length - 1]
+  return grid[x][y].player === consts.PLAYERS.EMPTY
+}
+
 /**
  * Standardizes a path and checks if it truly exists.
  * If it does, the last element will be an empty cell.
@@ -98,6 +105,7 @@ export function confirmPath(grid, path, color) {
   if (trimmedPath.length === 0 || _.isEmpty(trimmedPath[0]))
     return false
   if (!containsOpposite(grid, trimmedPath, color)) return false
+  if (!lastIsEmpty(grid, trimmedPath)) return false
   return trimmedPath
 }
 
