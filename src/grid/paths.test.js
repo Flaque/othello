@@ -25,7 +25,7 @@ test("Last is Empty", () => {
     **BW*B**
     **WWW***
     ****W***
-    ****B***
+    ****W***
     `)
 
   let down = paths.down(0,1)
