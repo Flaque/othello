@@ -171,8 +171,12 @@ var app = new Vue({
 
 
       // Pause for the AI player ask our permission
-      if (this.isOurTurn) {
-        this.paused = true
+      if (!this.isOurTurn) {
+        clearTimeout(this.timer)
+        this.seconds = 10
+        this.tickTimer()
+      } else {
+        this.paused = true;
       }
 
       // Update turn
@@ -197,9 +201,6 @@ var app = new Vue({
       }
 
       // Now lets start the timer for the next turn
-      clearTimeout(this.timer)
-      this.seconds = 10
-      this.tickTimer()
       if (grid.getAvailable(this.rows, this.turn).length <= 0) {
         this.skipTurn()
       }
@@ -225,7 +226,7 @@ var app = new Vue({
       this.tickTimer()
     },
     pickMove: function() {
-      setTimeout(this.pickMoveForAI, 4000)
+      setTimeout(this.pickMoveForAI, 3000)
     },
     pickMoveForAI: function() {
       let random = _.sample(grid.getAvailable(this.rows, this.turn))
@@ -250,6 +251,11 @@ var app = new Vue({
     },
 
     tickTimer: function(){
+
+      if (this.isOurTurn) {
+        clearTimeout(this.timer)
+        this.seconds = 10
+      }
 
       this.seconds -= 1
 
